@@ -1,14 +1,32 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function Button({ children, ...buttonProps }) {
+const actionSymbols = {
+  addition: String.fromCharCode(43),
+  subtraction: String.fromCharCode(8722),
+  multiplication: String.fromCharCode(215),
+  division: String.fromCharCode(247),
+  equation: String.fromCharCode(61),
+  backspace: String.fromCharCode(8592),
+  C: 'C',
+  dot: String.fromCharCode(803)
+};
+
+function Button({ handleButtonClick, action, ...buttonProps }) {
   return (
     <button
-      className="px-2 py-1 rounded-lg bg-green-400 text-green-800 text-xl font-light uppercase shadow-md hover:shadow-lg"
+      onClick={() => handleButtonClick(action)}
+      className="border-solid border-gray-600 border text-2xl sm:text-3xl font-light w-full py-4 sm:py-6"
       {...buttonProps}
     >
-      {children}
+      {actionSymbols[action] || action}
     </button>
   );
 }
+
+Button.propTypes = {
+  action: PropTypes.string.isRequired,
+  handleButtonClick: PropTypes.func.isRequired
+};
 
 export default Button;
