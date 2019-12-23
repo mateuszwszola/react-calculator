@@ -18,7 +18,7 @@ Make sure you have npm installed on your computer
 
 ### Installing
 
-CD into the project directory and install the project dependencies with npm
+Install the project dependencies with npm
 
 ```
 npm install
