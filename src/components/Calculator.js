@@ -88,7 +88,7 @@ function CalculatorContainer() {
 
 function Calculator({ output, handleButtonClick }) {
   return (
-    <div className="w-full h-auto max-w-sm rounded shadow-xl text-gray-900 border-solid border-gray-800 border">
+    <div className="w-full max-w-sm mx-auto sm:rounded shadow-xl text-gray-900 border-solid border-gray-800 border">
       <div className="flex">
         <div className="w-full px-6 py-4 bg-gray-900 text-right">
           <CalculatorOutput output={output} />
