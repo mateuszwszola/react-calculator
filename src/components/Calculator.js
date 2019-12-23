@@ -1,98 +1,123 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Button from './Button';
+import ButtonCell from './ButtonCell';
+import CalculatorOutput from './CalculatorOutput';
 import { mathOperations } from '../helpers';
 
 function CalculatorContainer() {
-  const [clicksHistory, setClicksHistory] = useState([]);
   const [currentOutput, setCurrentOutput] = useState('');
   const [startFreshNext, setStartFreshNext] = useState(false);
   const tmpValue = useRef(null);
   const tmpOperation = useRef(null);
 
-  console.log({ tmpValue, tmpOperation, clicksHistory, currentOutput });
+  console.log({
+    tmpValue,
+    tmpOperation,
+    currentOutput,
+    startFreshNext
+  });
 
-  const handleButtonClick = value => {
-    setClicksHistory([...clicksHistory, value]);
+  function resetTmpValues() {
+    tmpValue.current = null;
+    tmpOperation.current = null;
+  }
+
+  function resetCalculator() {
+    resetTmpValues();
+    setCurrentOutput('');
+    setStartFreshNext(false);
+  }
+
+  function calculateNewTmpValue() {
+    tmpValue.current = mathOperations[tmpOperation.current](
+      tmpValue.current,
+      Number(currentOutput)
+    );
+  }
+
+  function handleButtonClick(value) {
     // Value is a number or a 'dot' -> update currentOutput
     if (!Number.isNaN(Number(value)) || value === 'dot') {
       // If output is empty ('') AND value is 0 -> DO NOT update currentOutput (basically, do not add leading zeros)
-      if (!(Number(value) === 0 && currentOutput === '')) {
+      if (
+        !(Number(value) === 0 && currentOutput === '') &&
+        !(value === 'dot' && currentOutput.includes('.'))
+      ) {
         let newOutput;
         if (startFreshNext) {
-          newOutput = value === 'dot' ? '.' : value;
+          newOutput = value === 'dot' ? '0.' : value;
+          setStartFreshNext(false);
         } else {
           newOutput =
-            value === 'dot' ? currentOutput + '.' : currentOutput + value;
+            value === 'dot' ? currentOutput + '0.' : currentOutput + value;
         }
+
         setCurrentOutput(newOutput);
       }
     } else if (value === 'C') {
-      setCurrentOutput('');
-      tmpValue.current = null;
-      tmpOperation.current = null;
+      resetCalculator();
     } else if (value === 'backspace') {
       setCurrentOutput(currentOutput.slice(0, currentOutput.length - 1)); // remove last character
     } else if (value === 'equation') {
+      // do something only if tmp value and operation is saved
       if (tmpValue.current && tmpOperation.current) {
-        tmpValue.current = mathOperations[tmpOperation.current](
-          tmpValue.current,
-          Number(currentOutput)
-        );
+        calculateNewTmpValue();
         setCurrentOutput(tmpValue.current.toString());
-        tmpValue.current = null;
-        tmpOperation.current = null;
+        resetTmpValues();
         setStartFreshNext(true);
       }
     } else {
-      if (tmpValue.current) {
+      if (tmpValue.current && tmpOperation.current) {
         // Doing extra operation -> update tmp value
-        tmpValue.current = mathOperations[tmpOperation.current](
-          tmpValue.current,
-          Number(currentOutput)
-        );
+        calculateNewTmpValue();
       } else {
-        tmpValue.current = Number(currentOutput); // save current display number
+        tmpValue.current = Number(currentOutput); // save current output as number
       }
       tmpOperation.current = value; // save current operation
       setCurrentOutput('');
     }
-  };
+  }
 
   return (
-    <Calculator output={currentOutput} handleButtonClick={handleButtonClick} />
+    <Calculator
+      output={currentOutput || '0'}
+      handleButtonClick={handleButtonClick}
+    />
   );
 }
 
 function Calculator({ output, handleButtonClick }) {
   return (
-    <div className="max-w-sm mx-auto text-gray-800">
+    <div className="w-full h-auto max-w-sm rounded shadow-xl text-gray-900 border-solid border-gray-800 border">
       <div className="flex">
         <div className="w-full px-6 py-4 bg-gray-900 text-right">
-          <h1 className="text-white text-5xl font-thin">{output || 0}</h1>
+          <CalculatorOutput output={output} />
         </div>
       </div>
 
-      <div className="flex">
-        <div className="w-2/4 bg-gray-400">
-          <Button action="C" handleButtonClick={handleButtonClick} />
+      <div className="flex flex-wrap">
+        <div className="w-2/4 bg-gray-400 hover:bg-gray-500">
+          <ButtonCell action="C" handleButtonClick={handleButtonClick} />
         </div>
-        <div className="w-1/4 bg-gray-400">
-          <Button action="backspace" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-gray-400 hover:bg-gray-500">
+          <ButtonCell
+            action="backspace"
+            handleButtonClick={handleButtonClick}
+          />
         </div>
-        <div className="w-1/4 bg-orange-500 text-white">
-          <Button action="division" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-orange-500 hover:bg-orange-600 text-white">
+          <ButtonCell action="division" handleButtonClick={handleButtonClick} />
         </div>
       </div>
 
       <div className="flex">
         {['7', '8', '9'].map(number => (
-          <div key={number} className="w-1/4 bg-gray-300">
-            <Button action={number} handleButtonClick={handleButtonClick} />
+          <div key={number} className="w-1/4 bg-gray-300 hover:bg-gray-400">
+            <ButtonCell action={number} handleButtonClick={handleButtonClick} />
           </div>
         ))}
-        <div className="w-1/4 bg-orange-500 text-white">
-          <Button
+        <div className="w-1/4 bg-orange-500 hover:bg-orange-600 text-white">
+          <ButtonCell
             action="multiplication"
             handleButtonClick={handleButtonClick}
           />
@@ -101,35 +126,38 @@ function Calculator({ output, handleButtonClick }) {
 
       <div className="flex">
         {['4', '5', '6'].map(number => (
-          <div key={number} className="w-1/4 bg-gray-300">
-            <Button action={number} handleButtonClick={handleButtonClick} />
+          <div key={number} className="w-1/4 bg-gray-300 hover:bg-gray-400">
+            <ButtonCell action={number} handleButtonClick={handleButtonClick} />
           </div>
         ))}
-        <div className="w-1/4 bg-orange-500 text-white">
-          <Button action="subtraction" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-orange-500 hover:bg-orange-600 text-white">
+          <ButtonCell
+            action="subtraction"
+            handleButtonClick={handleButtonClick}
+          />
         </div>
       </div>
 
       <div className="flex">
         {['1', '2', '3'].map(number => (
-          <div key={number} className="w-1/4 bg-gray-300">
-            <Button action={number} handleButtonClick={handleButtonClick} />
+          <div key={number} className="w-1/4 bg-gray-300 hover:bg-gray-400">
+            <ButtonCell action={number} handleButtonClick={handleButtonClick} />
           </div>
         ))}
-        <div className="w-1/4 bg-orange-500 text-white">
-          <Button action="addition" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-orange-500 text-white hover:bg-orange-600">
+          <ButtonCell action="addition" handleButtonClick={handleButtonClick} />
         </div>
       </div>
 
       <div className="flex">
-        <div className="w-2/4 bg-gray-300">
-          <Button action="0" handleButtonClick={handleButtonClick} />
+        <div className="w-2/4 bg-gray-300 hover:bg-gray-400">
+          <ButtonCell action="0" handleButtonClick={handleButtonClick} />
         </div>
-        <div className="w-1/4 bg-gray-300">
-          <Button action="dot" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-gray-300 hover:bg-gray-400">
+          <ButtonCell action="dot" handleButtonClick={handleButtonClick} />
         </div>
-        <div className="w-1/4 bg-orange-500 text-white">
-          <Button action="equation" handleButtonClick={handleButtonClick} />
+        <div className="w-1/4 bg-orange-500 hover:bg-orange-600 text-white">
+          <ButtonCell action="equation" handleButtonClick={handleButtonClick} />
         </div>
       </div>
     </div>

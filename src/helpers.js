@@ -12,3 +12,14 @@ export const mathOperations = {
     return x / y;
   }
 };
+
+export const actionSymbols = {
+  addition: String.fromCharCode(43),
+  subtraction: String.fromCharCode(8722),
+  multiplication: String.fromCharCode(215),
+  division: String.fromCharCode(247),
+  equation: String.fromCharCode(61),
+  backspace: String.fromCharCode(8592),
+  C: 'C',
+  dot: String.fromCharCode(803)
+};
