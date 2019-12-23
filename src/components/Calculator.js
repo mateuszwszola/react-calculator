@@ -10,13 +10,6 @@ function CalculatorContainer() {
   const tmpValue = useRef(null);
   const tmpOperation = useRef(null);
 
-  console.log({
-    tmpValue,
-    tmpOperation,
-    currentOutput,
-    startFreshNext
-  });
-
   function resetTmpValues() {
     tmpValue.current = null;
     tmpOperation.current = null;
