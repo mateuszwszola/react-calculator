@@ -41,12 +41,12 @@ function CalculatorContainer() {
   }
 
   function handleAction(action) {
-    console.log({
-      tmpValue: tmpValue.current,
-      tmpOperation: tmpOperation.current,
-      action,
-      currentOutput
-    });
+    // console.log({
+    //   tmpValue: tmpValue.current,
+    //   tmpOperation: tmpOperation.current,
+    //   action,
+    //   currentOutput
+    // });
     // action is a number or a 'dot' -> update currentOutput
     if (!isNaN(Number(action)) || action === 'dot') {
       // If output is empty ('') AND action is 0 -> DO NOT update currentOutput (basically, do not add leading zeros or multiple dots)
