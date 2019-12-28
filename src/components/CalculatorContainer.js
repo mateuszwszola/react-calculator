@@ -51,7 +51,7 @@ function CalculatorContainer() {
     if (!isNaN(Number(action)) || action === 'dot') {
       // If output is empty ('') AND action is 0 -> DO NOT update currentOutput (basically, do not add leading zeros or multiple dots)
       if (
-        !(Number(action) === 0 && currentOutput === '0') &&
+        !(Number(action) === 0 && currentOutput === '') &&
         !(action === 'dot' && currentOutput.includes('.'))
       ) {
         let newOutput;
