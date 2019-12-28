@@ -20,6 +20,30 @@ export const actionSymbols = {
   division: String.fromCharCode(247),
   equation: String.fromCharCode(61),
   backspace: String.fromCharCode(8592),
-  C: 'C',
+  reset: 'C',
   dot: String.fromCharCode(803)
+};
+
+export const inputKeysAction = {
+  '0': '0',
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  '8': '8',
+  '9': '9',
+  '.': 'dot',
+  '=': 'equation',
+  enter: 'equation',
+  '+': 'addition',
+  '-': 'subtraction',
+  x: 'multiplication',
+  '*': 'multiplication',
+  '/': 'division',
+  backspace: 'backspace',
+  c: 'reset',
+  escape: 'reset'
 };

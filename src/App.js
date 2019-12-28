@@ -1,11 +1,11 @@
 import React from 'react';
-import Calculator from './components/Calculator';
+import CalculatorContainer from './components/CalculatorContainer';
 
 function App() {
   return (
     <div className="flex flex-col bg-orange-100 h-screen">
       <main className="flex-grow w-full flex items-start sm:items-center">
-        <Calculator />
+        <CalculatorContainer />
       </main>
       <footer className="flex flex-col items-center justify-center sm:flex-row sm:justify-around  text-center px-4 py-1 bg-gray-900 text-indigo-200 tracking-wide font-light sm:text-lg">
         <a
