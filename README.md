@@ -2,7 +2,7 @@
 
 React Calculator that looks like iOS calculator
 
-![Preview](https://www.dropbox.com/s/k9ibuwc8796hb1x/react-calculator-v2.png?raw=1)
+<img src="https://www.dropbox.com/s/k9ibuwc8796hb1x/react-calculator-v2.png?raw=1" alt="project preview" width="500">
 
 ## Deployed version
 
